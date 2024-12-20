@@ -1,0 +1,11 @@
+{
+  "dbpath" : "db",
+  "repos" : {
+    "words" : {
+      "url" : "https://github.com/kavfixnel/words.git",
+      "vcs-config" : {
+        "ref" : "main"
+      }
+    }
+  }
+}

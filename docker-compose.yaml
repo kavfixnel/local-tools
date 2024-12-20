@@ -1,0 +1,32 @@
+services:
+  hound:
+    image: ghcr.io/hound-search/hound:0.6.0
+    container_name: hound
+    volumes:
+      - ./configs/hound-config.json:/data/config.json:ro
+
+  homer:
+    image: b4bz/homer
+    container_name: homer
+    volumes:
+      - ./configs/homer-config.yaml:/www/assets/config.yml:ro # Make sure your local config directory exists
+    user: 1000:1000 # default
+    environment:
+      - INIT_ASSETS=1 # default, requires the config directory to be writable for the container user (see user option)
+    restart: unless-stopped
+
+  diff-text:
+    build: ./diff-text
+    ports:
+      - "3012:80"
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    volumes:
+      - ./configs/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+      - "3000-3010:3000-3010"
+    depends_on:
+      - hound
